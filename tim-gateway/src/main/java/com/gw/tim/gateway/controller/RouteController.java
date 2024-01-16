@@ -152,7 +152,7 @@ public class RouteController implements RouteApi {
      * @return
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    @ResponseBody()
+    @ResponseBody
     @Override
     public BaseResponse<TIMServerResVO> login(@RequestBody LoginReqVO loginReqVO) throws Exception {
         BaseResponse<TIMServerResVO> res = new BaseResponse();

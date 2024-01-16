@@ -39,4 +39,11 @@ public class Constants {
     }
 
 
+    public static final String MQ_MESSAGE_TOPIC = "tim-message";
+
+    public static final String MQ_MESSAGE_CONSUMER_TYPE_PERSISTENT = "tim-persistent-consumer";
+
+    public static final String MQ_MESSAGE_CONSUMER_TYPE_FORWARD = "tim-forward-consumer";
+
+
 }
