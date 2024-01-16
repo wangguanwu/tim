@@ -108,7 +108,8 @@ public class RouteController implements RouteApi {
             TIMServerResVO TIMServerResVO = accountService.loadRouteRelatedByUserId(p2pRequest.getReceiveUserId());
 
             //p2pRequest.getReceiveUserId()==>消息接收者的 userID
-            ChatReqVO chatVO = new ChatReqVO(p2pRequest.getReceiveUserId(), p2pRequest.getMsg());
+            ChatReqVO chatVO = new ChatReqVO(p2pRequest.getReceiveUserId(), p2pRequest.getUserId(), p2pRequest.getMsg(),
+                    Constants.ChatType.SINGLE.getType());
             accountService.pushMsg(TIMServerResVO, p2pRequest.getUserId(), chatVO);
 
             res.setCode(StatusEnum.SUCCESS.getCode());
@@ -124,20 +125,20 @@ public class RouteController implements RouteApi {
     /**
      * 客户端下线
      *
-     * @param groupReqVO
+     * @param reqVo
      * @return
      * @throws Exception
      */
     @RequestMapping(value = "offLine", method = RequestMethod.POST)
-    @ResponseBody()
+    @ResponseBody
     @Override
-    public BaseResponse<NULLBody> offLine(@RequestBody ChatReqVO groupReqVO) throws Exception {
+    public BaseResponse<NULLBody> offLine(@RequestBody ChatReqVO reqVo) throws Exception {
         BaseResponse<NULLBody> res = new BaseResponse();
 
-        TIMUserInfo timUserInfo = userInfoCacheService.loadUserInfoByUserId(groupReqVO.getToUserId());
+        TIMUserInfo timUserInfo = userInfoCacheService.loadUserInfoByUserId(reqVo.getToUserId());
 
         LOGGER.info("user [{}] offline!", timUserInfo.toString());
-        accountService.offLine(groupReqVO.getToUserId());
+        accountService.offLine(reqVo.getToUserId());
 
         res.setCode(StatusEnum.SUCCESS.getCode());
         res.setMessage(StatusEnum.SUCCESS.getMessage());

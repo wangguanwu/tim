@@ -33,11 +33,11 @@ public interface RouteApi {
     /**
      * Offline account
      *
-     * @param groupReqVO
+     * @param reqVo
      * @return
      * @throws Exception
      */
-    Object offLine(ChatReqVO groupReqVO) throws Exception;
+    Object offLine(ChatReqVO reqVo) throws Exception;
 
     /**
      * Login account

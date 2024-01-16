@@ -1,10 +1,16 @@
 package com.gw.tim.common.pojo;
 
+import lombok.Data;
+import lombok.ToString;
+
 /**
  * 用户信息
  *
  * @since JDK 1.8
  */
+
+@Data
+@ToString
 public class TIMUserInfo {
     private Long userId ;
     private String userName ;

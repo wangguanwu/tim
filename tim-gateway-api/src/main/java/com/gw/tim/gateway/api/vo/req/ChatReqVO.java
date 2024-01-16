@@ -33,8 +33,9 @@ public class ChatReqVO extends BaseRequest {
     public ChatReqVO() {
     }
 
-    public ChatReqVO(Long userId, String msg) {
-        this.toUserId = userId;
+    public ChatReqVO(Long toUserId, String msg) {
+        this.toUserId = toUserId;
         this.msg = msg;
     }
+
 }
