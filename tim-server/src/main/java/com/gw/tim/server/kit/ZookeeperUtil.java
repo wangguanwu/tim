@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
  * @since JDK 1.8
  */
 @Component
-public class ZKit {
+public class ZookeeperUtil {
 
-    private static Logger logger = LoggerFactory.getLogger(ZKit.class);
+    private static Logger logger = LoggerFactory.getLogger(ZookeeperUtil.class);
 
     @Autowired
     private ZkClient zkClient;

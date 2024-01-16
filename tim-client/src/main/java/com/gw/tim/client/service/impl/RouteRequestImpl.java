@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.gw.tim.client.config.AppConfiguration;
 import com.gw.tim.client.service.RouteRequest;
 import com.gw.tim.client.thread.ContextHolder;
-import com.gw.tim.client.vo.req.GroupReqVO;
-import com.gw.tim.client.vo.req.P2PReqVO;
+import com.gw.tim.client.vo.req.GroupMessageReqVO;
+import com.gw.tim.client.vo.req.SingleMessageReqVO;
 import com.gw.tim.client.vo.res.TIMServerResVO;
 import com.gw.tim.client.service.EchoService;
 import com.gw.tim.client.vo.req.LoginReqVO;
@@ -48,9 +48,9 @@ public class RouteRequestImpl implements RouteRequest {
     private AppConfiguration appConfiguration;
 
     @Override
-    public void sendGroupMsg(GroupReqVO groupReqVO) throws Exception {
+    public void sendGroupMsg(GroupMessageReqVO groupMessageReqVO) throws Exception {
         RouteApi routeApi = new ProxyManager<>(RouteApi.class, gatewayUrl, okHttpClient).getInstance();
-        ChatReqVO chatReqVO = new ChatReqVO(groupReqVO.getUserId(), groupReqVO.getMsg());
+        ChatReqVO chatReqVO = new ChatReqVO(groupMessageReqVO.getUserId(), groupMessageReqVO.getMsg());
         Response response = null;
         try {
             response = (Response) routeApi.groupRoute(chatReqVO);
@@ -62,12 +62,12 @@ public class RouteRequestImpl implements RouteRequest {
     }
 
     @Override
-    public void sendP2PMsg(P2PReqVO p2PReqVO) throws Exception {
+    public void sendP2PMsg(SingleMessageReqVO singleMessageReqVO) throws Exception {
         RouteApi routeApi = new ProxyManager<>(RouteApi.class, gatewayUrl, okHttpClient).getInstance();
-        com.gw.tim.gateway.api.vo.req.P2PReqVO vo = new com.gw.tim.gateway.api.vo.req.P2PReqVO();
-        vo.setMsg(p2PReqVO.getMsg());
-        vo.setReceiveUserId(p2PReqVO.getReceiveUserId());
-        vo.setUserId(p2PReqVO.getUserId());
+        com.gw.tim.gateway.api.vo.req.SingleMessageReqVO vo = new com.gw.tim.gateway.api.vo.req.SingleMessageReqVO();
+        vo.setMsg(singleMessageReqVO.getMsg());
+        vo.setReceiveUserId(singleMessageReqVO.getReceiveUserId());
+        vo.setUserId(singleMessageReqVO.getUserId());
 
         Response response = null;
         try {
@@ -77,7 +77,7 @@ public class RouteRequestImpl implements RouteRequest {
 
             // account offline.
             if (baseResponse.getCode().equals(StatusEnum.OFF_LINE.getCode())) {
-                LOGGER.error(p2PReqVO.getReceiveUserId() + ":" + StatusEnum.OFF_LINE.getMessage());
+                LOGGER.error(singleMessageReqVO.getReceiveUserId() + ":" + StatusEnum.OFF_LINE.getMessage());
             }
 
         } catch (Exception e) {

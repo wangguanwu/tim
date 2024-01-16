@@ -1,4 +1,4 @@
-package com.gw.tim.client.vo.req;
+package com.gw.tim.gateway.api.vo.req;
 
 import com.gw.tim.common.req.BaseRequest;
 
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  *
  * @since JDK 1.8
  */
-public class P2PReqVO extends BaseRequest {
+public class SingleMessageReqVO extends BaseRequest {
 
     @NotNull(message = "userId 不能为空")
     //消息发送者的 userId
@@ -24,10 +24,10 @@ public class P2PReqVO extends BaseRequest {
     @NotNull(message = "msg 不能为空")
     private String msg;
 
-    public P2PReqVO() {
+    public SingleMessageReqVO() {
     }
 
-    public P2PReqVO(Long userId, Long receiveUserId, String msg) {
+    public SingleMessageReqVO(Long userId, Long receiveUserId, String msg) {
         this.userId = userId;
         this.receiveUserId = receiveUserId;
         this.msg = msg;

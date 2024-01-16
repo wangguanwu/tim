@@ -1,4 +1,4 @@
-package com.gw.tim.client.vo.req;
+package com.gw.tim.gateway.api.vo.req;
 
 
 import com.gw.tim.common.req.BaseRequest;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
  *
  * @since JDK 1.8
  */
-public class GroupReqVO extends BaseRequest {
+public class GroupMessageReqVO extends BaseRequest {
 
     @NotNull(message = "userId 不能为空")
     //消息发送者的 userId
@@ -19,7 +19,7 @@ public class GroupReqVO extends BaseRequest {
     @NotNull(message = "msg 不能为空")
     private String msg;
 
-    public GroupReqVO(Long userId, String msg) {
+    public GroupMessageReqVO(Long userId, String msg) {
         this.userId = userId;
         this.msg = msg;
     }

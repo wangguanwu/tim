@@ -8,6 +8,7 @@ import java.io.Serializable;
  */
 public class TIMServerResVO implements Serializable {
 
+    private static final long serialVersionUID = 7669938991440995537L;
     /**
      * code : 9000
      * message : 成功

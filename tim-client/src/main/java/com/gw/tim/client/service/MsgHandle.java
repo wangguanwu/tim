@@ -1,7 +1,7 @@
 package com.gw.tim.client.service;
 
-import com.gw.tim.client.vo.req.GroupReqVO;
-import com.gw.tim.client.vo.req.P2PReqVO;
+import com.gw.tim.client.vo.req.GroupMessageReqVO;
+import com.gw.tim.client.vo.req.SingleMessageReqVO;
 
 /**
  * 消息处理器
@@ -18,17 +18,17 @@ public interface MsgHandle {
 
     /**
      * 群聊
-     * @param groupReqVO 群聊消息 其中的 userId 为发送者的 userID
+     * @param groupMessageReqVO 群聊消息 其中的 userId 为发送者的 userID
      * @throws Exception
      */
-    void groupChat(GroupReqVO groupReqVO) throws Exception ;
+    void groupChat(GroupMessageReqVO groupMessageReqVO) throws Exception ;
 
     /**
      * 私聊
-     * @param p2PReqVO 私聊请求
+     * @param singleMessageReqVO 私聊请求
      * @throws Exception
      */
-    void p2pChat(P2PReqVO p2PReqVO) throws Exception;
+    void p2pChat(SingleMessageReqVO singleMessageReqVO) throws Exception;
 
 
     // TODO: 2018/12/26 后续对消息的处理可以优化为责任链模式

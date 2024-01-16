@@ -1,9 +1,9 @@
 package com.gw.tim.client.service;
 
-import com.gw.tim.client.vo.req.GroupReqVO;
+import com.gw.tim.client.vo.req.GroupMessageReqVO;
 import com.gw.tim.client.vo.res.TIMServerResVO;
 import com.gw.tim.client.vo.req.LoginReqVO;
-import com.gw.tim.client.vo.req.P2PReqVO;
+import com.gw.tim.client.vo.req.SingleMessageReqVO;
 import com.gw.tim.client.vo.res.OnlineUsersResVO;
 
 import java.util.List;
@@ -16,18 +16,18 @@ public interface RouteRequest {
 
     /**
      * 群发消息
-     * @param groupReqVO 消息
+     * @param groupMessageReqVO 消息
      * @throws Exception
      */
-    void sendGroupMsg(GroupReqVO groupReqVO) throws Exception;
+    void sendGroupMsg(GroupMessageReqVO groupMessageReqVO) throws Exception;
 
 
     /**
      * 私聊
-     * @param p2PReqVO
+     * @param singleMessageReqVO
      * @throws Exception
      */
-    void sendP2PMsg(P2PReqVO p2PReqVO)throws Exception;
+    void sendP2PMsg(SingleMessageReqVO singleMessageReqVO)throws Exception;
 
     /**
      * 获取服务器

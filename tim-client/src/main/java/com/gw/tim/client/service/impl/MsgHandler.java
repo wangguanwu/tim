@@ -2,8 +2,8 @@ package com.gw.tim.client.service.impl;
 
 import com.gw.tim.client.config.AppConfiguration;
 import com.gw.tim.client.service.*;
-import com.gw.tim.client.vo.req.GroupReqVO;
-import com.gw.tim.client.vo.req.P2PReqVO;
+import com.gw.tim.client.vo.req.GroupMessageReqVO;
+import com.gw.tim.client.vo.req.SingleMessageReqVO;
 import com.gw.tim.client.client.TIMClient;
 import com.gw.tim.common.util.StringUtil;
 import org.slf4j.Logger;
@@ -62,21 +62,21 @@ public class MsgHandler implements MsgHandle {
         String[] totalMsg = msg.split("::");
         if (totalMsg.length > 1) {
             //私聊
-            P2PReqVO p2PReqVO = new P2PReqVO();
-            p2PReqVO.setUserId(configuration.getUserId());
-            p2PReqVO.setReceiveUserId(Long.parseLong(totalMsg[0]));
-            p2PReqVO.setMsg(totalMsg[1]);
+            SingleMessageReqVO singleMessageReqVO = new SingleMessageReqVO();
+            singleMessageReqVO.setUserId(configuration.getUserId());
+            singleMessageReqVO.setReceiveUserId(Long.parseLong(totalMsg[0]));
+            singleMessageReqVO.setMsg(totalMsg[1]);
             try {
-                p2pChat(p2PReqVO);
+                p2pChat(singleMessageReqVO);
             } catch (Exception e) {
                 LOGGER.error("Exception", e);
             }
 
         } else {
             //群聊
-            GroupReqVO groupReqVO = new GroupReqVO(configuration.getUserId(), msg);
+            GroupMessageReqVO groupMessageReqVO = new GroupMessageReqVO(configuration.getUserId(), msg);
             try {
-                groupChat(groupReqVO);
+                groupChat(groupMessageReqVO);
             } catch (Exception e) {
                 LOGGER.error("Exception", e);
             }
@@ -98,14 +98,14 @@ public class MsgHandler implements MsgHandle {
     }
 
     @Override
-    public void groupChat(GroupReqVO groupReqVO) throws Exception {
-        routeRequest.sendGroupMsg(groupReqVO);
+    public void groupChat(GroupMessageReqVO groupMessageReqVO) throws Exception {
+        routeRequest.sendGroupMsg(groupMessageReqVO);
     }
 
     @Override
-    public void p2pChat(P2PReqVO p2PReqVO) throws Exception {
+    public void p2pChat(SingleMessageReqVO singleMessageReqVO) throws Exception {
 
-        routeRequest.sendP2PMsg(p2PReqVO);
+        routeRequest.sendP2PMsg(singleMessageReqVO);
 
     }
 

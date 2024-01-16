@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 /**
  * @since JDK 1.8
  */
-public class SendMsgReqVO extends BaseRequest {
+public class SendMessageReqVO extends BaseRequest {
 
     @NotNull(message = "msg 不能为空")
     private String msg;

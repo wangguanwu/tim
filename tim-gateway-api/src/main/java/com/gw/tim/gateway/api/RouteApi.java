@@ -3,7 +3,7 @@ package com.gw.tim.gateway.api;
 import com.gw.tim.common.res.BaseResponse;
 import com.gw.tim.gateway.api.vo.req.ChatReqVO;
 import com.gw.tim.gateway.api.vo.req.LoginReqVO;
-import com.gw.tim.gateway.api.vo.req.P2PReqVO;
+import com.gw.tim.gateway.api.vo.req.SingleMessageReqVO;
 import com.gw.tim.gateway.api.vo.req.RegisterInfoReqVO;
 import com.gw.tim.gateway.api.vo.res.RegisterInfoResVO;
 
@@ -30,7 +30,7 @@ public interface RouteApi {
      * @return
      * @throws Exception
      */
-    Object p2pRoute(P2PReqVO p2pRequest) throws Exception;
+    Object p2pRoute(SingleMessageReqVO p2pRequest) throws Exception;
 
 
     /**

@@ -13,7 +13,7 @@ public class RegistryZK implements Runnable {
 
     private static Logger logger = LoggerFactory.getLogger(RegistryZK.class);
 
-    private ZKit zKit;
+    private ZookeeperUtil zKit;
 
     private AppConfiguration appConfiguration ;
 
@@ -25,7 +25,7 @@ public class RegistryZK implements Runnable {
         this.ip = ip;
         this.timServerPort = timServerPort;
         this.httpPort = httpPort ;
-        zKit = SpringBeanFactory.getBean(ZKit.class) ;
+        zKit = SpringBeanFactory.getBean(ZookeeperUtil.class) ;
         appConfiguration = SpringBeanFactory.getBean(AppConfiguration.class) ;
     }
 

@@ -2,11 +2,11 @@ package com.gw.tim.client.controller;
 
 import com.gw.tim.client.service.RouteRequest;
 import com.gw.tim.client.vo.req.GoogleProtocolVO;
-import com.gw.tim.client.vo.req.GroupReqVO;
-import com.gw.tim.client.vo.req.StringReqVO;
+import com.gw.tim.client.vo.req.GroupMessageReqVO;
+import com.gw.tim.client.vo.req.TextMessageReqVO;
 import com.gw.tim.client.vo.res.SendMsgResVO;
 import com.gw.tim.client.client.TIMClient;
-import com.gw.tim.client.vo.req.SendMsgReqVO;
+import com.gw.tim.client.vo.req.SendMessageReqVO;
 import com.gw.tim.common.enums.StatusEnum;
 import com.gw.tim.common.res.BaseResponse;
 import com.gw.tim.common.res.NULLBody;
@@ -35,16 +35,16 @@ public class IndexController {
     /**
      * 向服务端发消息 字符串
      *
-     * @param stringReqVO
+     * @param textMessageVO
      * @return
      */
     @RequestMapping(value = "sendStringMsg", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse<NULLBody> sendStringMsg(@RequestBody StringReqVO stringReqVO) {
+    public BaseResponse<NULLBody> sendStringMsg(@RequestBody TextMessageReqVO textMessageVO) {
         BaseResponse<NULLBody> res = new BaseResponse();
 
         for (int i = 0; i < 100; i++) {
-            heartbeatClient.sendStringMsg(stringReqVO.getMsg());
+            heartbeatClient.sendStringMsg(textMessageVO.getMsg());
         }
 
         SendMsgResVO sendMsgResVO = new SendMsgResVO();
@@ -85,11 +85,11 @@ public class IndexController {
      */
     @RequestMapping(value = "sendGroupMsg", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse sendGroupMsg(@RequestBody SendMsgReqVO sendMsgReqVO) throws Exception {
+    public BaseResponse sendGroupMsg(@RequestBody SendMessageReqVO sendMsgReqVO) throws Exception {
         BaseResponse<NULLBody> res = new BaseResponse();
 
-        GroupReqVO groupReqVO = new GroupReqVO(sendMsgReqVO.getUserId(), sendMsgReqVO.getMsg());
-        routeRequest.sendGroupMsg(groupReqVO);
+        GroupMessageReqVO groupMessageReqVO = new GroupMessageReqVO(sendMsgReqVO.getUserId(), sendMsgReqVO.getMsg());
+        routeRequest.sendGroupMsg(groupMessageReqVO);
 
         res.setCode(StatusEnum.SUCCESS.getCode());
         res.setMessage(StatusEnum.SUCCESS.getMessage());

@@ -7,13 +7,10 @@ import javax.validation.constraints.NotNull;
 /**
  * @since JDK 1.8
  */
-public class SendMsgReqVO extends BaseRequest {
+public class TextMessageReqVO extends BaseRequest {
 
     @NotNull(message = "msg 不能为空")
     private String msg;
-
-    @NotNull(message = "id 不能为空")
-    private long id;
 
     public String getMsg() {
         return msg;
@@ -21,13 +18,5 @@ public class SendMsgReqVO extends BaseRequest {
 
     public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 }

@@ -17,7 +17,7 @@ import com.gw.tim.gateway.service.CommonBizService;
 import com.gw.tim.gateway.service.UserInfoCacheService;
 import com.gw.tim.gateway.api.vo.req.ChatReqVO;
 import com.gw.tim.gateway.api.vo.req.LoginReqVO;
-import com.gw.tim.gateway.api.vo.req.P2PReqVO;
+import com.gw.tim.gateway.api.vo.req.SingleMessageReqVO;
 import com.gw.tim.gateway.api.vo.req.RegisterInfoReqVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,7 +102,7 @@ public class RouteController implements RouteApi {
     @RequestMapping(value = "p2pRoute", method = RequestMethod.POST)
     @ResponseBody()
     @Override
-    public BaseResponse<NULLBody> p2pRoute(@RequestBody P2PReqVO p2pRequest) throws Exception {
+    public BaseResponse<NULLBody> p2pRoute(@RequestBody SingleMessageReqVO p2pRequest) throws Exception {
         BaseResponse<NULLBody> res = new BaseResponse();
 
         try {
