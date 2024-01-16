@@ -1,5 +1,6 @@
 package com.gw.tim.gateway.controller;
 
+import com.gw.tim.common.constant.Constants;
 import com.gw.tim.common.enums.StatusEnum;
 import com.gw.tim.common.exception.TIMException;
 import com.gw.tim.common.pojo.RouteInfo;
@@ -9,16 +10,13 @@ import com.gw.tim.common.res.NULLBody;
 import com.gw.tim.common.route.algorithm.RouteHandle;
 import com.gw.tim.common.util.RouteInfoParseUtil;
 import com.gw.tim.gateway.api.RouteApi;
+import com.gw.tim.gateway.api.vo.req.*;
 import com.gw.tim.gateway.api.vo.res.RegisterInfoResVO;
 import com.gw.tim.gateway.api.vo.res.TIMServerResVO;
 import com.gw.tim.gateway.cache.ServerCache;
 import com.gw.tim.gateway.service.AccountService;
 import com.gw.tim.gateway.service.CommonBizService;
 import com.gw.tim.gateway.service.UserInfoCacheService;
-import com.gw.tim.gateway.api.vo.req.ChatReqVO;
-import com.gw.tim.gateway.api.vo.req.LoginReqVO;
-import com.gw.tim.gateway.api.vo.req.SingleMessageReqVO;
-import com.gw.tim.gateway.api.vo.req.RegisterInfoReqVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +62,7 @@ public class RouteController implements RouteApi {
     @RequestMapping(value = "groupRoute", method = RequestMethod.POST)
     @ResponseBody()
     @Override
-    public BaseResponse<NULLBody> groupRoute(@RequestBody ChatReqVO groupReqVO) throws Exception {
+    public BaseResponse<NULLBody> groupRoute(@RequestBody GroupMessageReqVO groupReqVO) throws Exception {
         BaseResponse<NULLBody> res = new BaseResponse();
 
         LOGGER.info("msg=[{}]", groupReqVO.toString());
@@ -72,9 +70,9 @@ public class RouteController implements RouteApi {
         //获取所有的推送列表
         Map<Long, TIMServerResVO> serverResVOMap = accountService.loadRouteRelated();
         for (Map.Entry<Long, TIMServerResVO> timServerResVOEntry : serverResVOMap.entrySet()) {
-            Long userId = timServerResVOEntry.getKey();
-            TIMServerResVO TIMServerResVO = timServerResVOEntry.getValue();
-            if (userId.equals(groupReqVO.getUserId())) {
+            Long toUserId = timServerResVOEntry.getKey();
+            TIMServerResVO serverInfo = timServerResVOEntry.getValue();
+            if (toUserId.equals(groupReqVO.getUserId())) {
                 //过滤掉自己
                 TIMUserInfo timUserInfo = userInfoCacheService.loadUserInfoByUserId(groupReqVO.getUserId());
                 LOGGER.warn("过滤掉了发送者 userId={}", timUserInfo.toString());
@@ -82,8 +80,8 @@ public class RouteController implements RouteApi {
             }
 
             //推送消息
-            ChatReqVO chatVO = new ChatReqVO(userId, groupReqVO.getMsg());
-            accountService.pushMsg(TIMServerResVO, groupReqVO.getUserId(), chatVO);
+            ChatReqVO chatVO = new ChatReqVO(toUserId, groupReqVO.getUserId(), groupReqVO.getMsg(), Constants.ChatType.GROUP.getType());
+            accountService.pushMsg(serverInfo, groupReqVO.getUserId(), chatVO);
 
         }
 
@@ -100,7 +98,7 @@ public class RouteController implements RouteApi {
      * @return
      */
     @RequestMapping(value = "p2pRoute", method = RequestMethod.POST)
-    @ResponseBody()
+    @ResponseBody
     @Override
     public BaseResponse<NULLBody> p2pRoute(@RequestBody SingleMessageReqVO p2pRequest) throws Exception {
         BaseResponse<NULLBody> res = new BaseResponse();
@@ -136,10 +134,10 @@ public class RouteController implements RouteApi {
     public BaseResponse<NULLBody> offLine(@RequestBody ChatReqVO groupReqVO) throws Exception {
         BaseResponse<NULLBody> res = new BaseResponse();
 
-        TIMUserInfo timUserInfo = userInfoCacheService.loadUserInfoByUserId(groupReqVO.getUserId());
+        TIMUserInfo timUserInfo = userInfoCacheService.loadUserInfoByUserId(groupReqVO.getToUserId());
 
         LOGGER.info("user [{}] offline!", timUserInfo.toString());
-        accountService.offLine(groupReqVO.getUserId());
+        accountService.offLine(groupReqVO.getToUserId());
 
         res.setCode(StatusEnum.SUCCESS.getCode());
         res.setMessage(StatusEnum.SUCCESS.getMessage());

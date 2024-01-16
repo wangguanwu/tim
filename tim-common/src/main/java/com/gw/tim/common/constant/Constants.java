@@ -38,12 +38,29 @@ public class Constants {
         public static final int PING = 3 ;
     }
 
+    public static enum ChatType {
+
+        SINGLE(1),
+
+        GROUP(2);
+
+        private final int type;
+
+        ChatType(int type) {
+            this.type = type;
+        }
+
+        public int getType() {
+            return type;
+        }
+    }
 
     public static final String MQ_MESSAGE_TOPIC = "tim-message";
 
     public static final String MQ_MESSAGE_CONSUMER_TYPE_PERSISTENT = "tim-persistent-consumer";
 
     public static final String MQ_MESSAGE_CONSUMER_TYPE_FORWARD = "tim-forward-consumer";
+
 
 
 }

@@ -2,14 +2,13 @@ package com.gw.tim.client.controller;
 
 import com.gw.tim.client.service.RouteRequest;
 import com.gw.tim.client.vo.req.GoogleProtocolVO;
-import com.gw.tim.client.vo.req.GroupMessageReqVO;
 import com.gw.tim.client.vo.req.TextMessageReqVO;
 import com.gw.tim.client.vo.res.SendMsgResVO;
 import com.gw.tim.client.client.TIMClient;
-import com.gw.tim.client.vo.req.SendMessageReqVO;
 import com.gw.tim.common.enums.StatusEnum;
 import com.gw.tim.common.res.BaseResponse;
 import com.gw.tim.common.res.NULLBody;
+import com.gw.tim.gateway.api.vo.req.GroupMessageReqVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -85,11 +84,10 @@ public class IndexController {
      */
     @RequestMapping(value = "sendGroupMsg", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse sendGroupMsg(@RequestBody SendMessageReqVO sendMsgReqVO) throws Exception {
+    public BaseResponse sendGroupMsg(@RequestBody GroupMessageReqVO sendMsgReqVO) throws Exception {
         BaseResponse<NULLBody> res = new BaseResponse();
 
-        GroupMessageReqVO groupMessageReqVO = new GroupMessageReqVO(sendMsgReqVO.getUserId(), sendMsgReqVO.getMsg());
-        routeRequest.sendGroupMsg(groupMessageReqVO);
+        routeRequest.sendGroupMsg(sendMsgReqVO);
 
         res.setCode(StatusEnum.SUCCESS.getCode());
         res.setMessage(StatusEnum.SUCCESS.getMessage());

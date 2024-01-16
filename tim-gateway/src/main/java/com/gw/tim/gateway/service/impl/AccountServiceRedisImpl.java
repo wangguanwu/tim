@@ -17,6 +17,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.Cursor;
@@ -145,19 +146,22 @@ public class AccountServiceRedisImpl implements AccountService {
 
 
     @Override
-    public void pushMsg(TIMServerResVO TIMServerResVO, long sendUserId, ChatReqVO groupReqVO) throws Exception {
+    public void pushMsg(TIMServerResVO serverInfo, long sendUserId, ChatReqVO groupReqVO) throws Exception {
         TIMUserInfo timUserInfo = userInfoCacheService.loadUserInfoByUserId(sendUserId);
 
-        String url = "http://" + TIMServerResVO.getIp() + ":" + TIMServerResVO.getHttpPort();
+        String url = "http://" + serverInfo.getIp() + ":" + serverInfo.getHttpPort();
         ServerApi serverApi = new ProxyManager<>(ServerApi.class, url, okHttpClient).getInstance();
-        SendMsgReqVO vo = new SendMsgReqVO(timUserInfo.getUserName() + ":" + groupReqVO.getMsg(), groupReqVO.getUserId());
+        SendMsgReqVO sendMsgReqVO = new SendMsgReqVO();
+        BeanUtils.copyProperties(groupReqVO, sendMsgReqVO);
         Response response = null;
         try {
-            response = (Response) serverApi.sendMsg(vo);
+            response = (Response) serverApi.sendMsg(sendMsgReqVO);
         } catch (Exception e) {
             LOGGER.error("Exception", e);
         } finally {
-            response.body().close();
+            if (null != response) {
+                response.body().close();
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package com.gw.tim.server.server;
 
 import com.gw.tim.common.constant.Constants;
 import com.gw.tim.common.protocol.TIMReqMsg;
+import com.gw.tim.common.util.JsonUtil;
 import com.gw.tim.server.init.TIMServerInitializer;
 import com.gw.tim.server.util.SessionSocketHolder;
 import com.gw.tim.server.api.vo.req.SendMsgReqVO;
@@ -79,16 +80,16 @@ public class TIMServer {
      * @param sendMsgReqVO 消息
      */
     public void sendMsg(SendMsgReqVO sendMsgReqVO) {
-        NioSocketChannel socketChannel = SessionSocketHolder.get(sendMsgReqVO.getUserId());
+        NioSocketChannel socketChannel = SessionSocketHolder.get(sendMsgReqVO.getToUserId());
 
         if (null == socketChannel) {
-            LOGGER.error("client {} offline!", sendMsgReqVO.getUserId());
+            LOGGER.error("client {} offline!", sendMsgReqVO.getToUserId());
             return;
         }
-        TIMReqMsg protocol = new TIMReqMsg(sendMsgReqVO.getUserId(), sendMsgReqVO.getMsg(), Constants.CommandType.MSG);
+        TIMReqMsg protocol = new TIMReqMsg(sendMsgReqVO.getToUserId(), JsonUtil.toJson(sendMsgReqVO), Constants.CommandType.MSG);
 
         ChannelFuture future = socketChannel.writeAndFlush(protocol);
         future.addListener((ChannelFutureListener) channelFuture ->
-                LOGGER.info("server push msg:[{}]", sendMsgReqVO.toString()));
+                LOGGER.info("server push msg:[{}]", sendMsgReqVO));
     }
 }

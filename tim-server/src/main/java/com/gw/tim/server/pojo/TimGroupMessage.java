@@ -20,4 +20,5 @@ public class TimGroupMessage extends BaseRequest implements Serializable {
     private Long groupId;
 
     private String msg;
+
 }

@@ -1,22 +1,19 @@
-package com.gw.tim.gateway.api.vo.req;
+package com.gw.tim.client.vo.req;
 
 import com.gw.tim.common.req.BaseRequest;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
 /**
- * Google Protocol 编解码发送
- *
  * @since JDK 1.8
  */
 
 @Data
 @ToString
-@AllArgsConstructor
-public class ChatReqVO extends BaseRequest {
+public class SendMsgReqVO extends BaseRequest {
+
 
     @NotNull(message = "userId 不能为空")
     private Long toUserId;
@@ -24,17 +21,10 @@ public class ChatReqVO extends BaseRequest {
     @NotNull(message = "toUserId 不能为空")
     private Long fromUserId;
 
+    private int type;
+
 
     @NotNull(message = "msg 不能为空")
     private String msg;
 
-    private int type;
-
-    public ChatReqVO() {
-    }
-
-    public ChatReqVO(Long userId, String msg) {
-        this.toUserId = userId;
-        this.msg = msg;
-    }
 }

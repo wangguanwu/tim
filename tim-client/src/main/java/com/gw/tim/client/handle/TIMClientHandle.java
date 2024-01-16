@@ -7,7 +7,9 @@ import com.gw.tim.client.service.impl.EchoServiceImpl;
 import com.gw.tim.client.util.SpringBeanFactory;
 import com.gw.tim.common.constant.Constants;
 import com.gw.tim.common.protocol.TIMReqMsg;
+import com.gw.tim.common.util.JsonUtil;
 import com.gw.tim.common.util.NettyAttrUtil;
+import com.gw.tim.gateway.api.vo.req.ChatReqVO;
 import com.vdurmont.emoji.EmojiParser;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -99,10 +101,12 @@ public class TIMClientHandle extends SimpleChannelInboundHandler<TIMReqMsg> {
 
         if (msg.getType() != Constants.CommandType.PING) {
             //回调消息
-            callBackMsg(msg.getReqMsg());
+            ChatReqVO chatReqVO = JsonUtil.fromJson(msg.getReqMsg(), ChatReqVO.class);
+            LOGGER.info("====> 接收到服务端原始消息:{}", msg.getReqMsg());
+            callBackMsg(chatReqVO.getMsg());
 
             //将消息中的 emoji 表情格式化为 Unicode 编码以便在终端可以显示
-            String response = EmojiParser.parseToUnicode(msg.getReqMsg());
+            String response = EmojiParser.parseToUnicode(chatReqVO.getMsg());
             echoService.echo(response);
         }
 

@@ -1,7 +1,7 @@
 package com.gw.tim.client.service;
 
-import com.gw.tim.client.vo.req.GroupMessageReqVO;
 import com.gw.tim.client.vo.req.SingleMessageReqVO;
+import com.gw.tim.gateway.api.vo.req.GroupMessageReqVO;
 
 /**
  * 消息处理器

@@ -1,10 +1,7 @@
 package com.gw.tim.gateway.api;
 
 import com.gw.tim.common.res.BaseResponse;
-import com.gw.tim.gateway.api.vo.req.ChatReqVO;
-import com.gw.tim.gateway.api.vo.req.LoginReqVO;
-import com.gw.tim.gateway.api.vo.req.SingleMessageReqVO;
-import com.gw.tim.gateway.api.vo.req.RegisterInfoReqVO;
+import com.gw.tim.gateway.api.vo.req.*;
 import com.gw.tim.gateway.api.vo.res.RegisterInfoResVO;
 
 /**
@@ -21,7 +18,7 @@ public interface RouteApi {
      * @return
      * @throws Exception
      */
-    Object groupRoute(ChatReqVO groupReqVO) throws Exception;
+    Object groupRoute(GroupMessageReqVO groupReqVO) throws Exception;
 
     /**
      * Point to point chat

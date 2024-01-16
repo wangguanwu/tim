@@ -2,10 +2,10 @@ package com.gw.tim.client.service.impl;
 
 import com.gw.tim.client.config.AppConfiguration;
 import com.gw.tim.client.service.*;
-import com.gw.tim.client.vo.req.GroupMessageReqVO;
 import com.gw.tim.client.vo.req.SingleMessageReqVO;
 import com.gw.tim.client.client.TIMClient;
 import com.gw.tim.common.util.StringUtil;
+import com.gw.tim.gateway.api.vo.req.GroupMessageReqVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +74,11 @@ public class MsgHandler implements MsgHandle {
 
         } else {
             //群聊
-            GroupMessageReqVO groupMessageReqVO = new GroupMessageReqVO(configuration.getUserId(), msg);
+            GroupMessageReqVO groupMessageReqVO = GroupMessageReqVO.builder()
+                    .groupId(null)
+                    .msg(msg)
+                    .userId(configuration.getUserId())
+                    .build();
             try {
                 groupChat(groupMessageReqVO);
             } catch (Exception e) {

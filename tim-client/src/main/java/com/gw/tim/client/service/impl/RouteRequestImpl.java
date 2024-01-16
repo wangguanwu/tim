@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.gw.tim.client.config.AppConfiguration;
 import com.gw.tim.client.service.RouteRequest;
 import com.gw.tim.client.thread.ContextHolder;
-import com.gw.tim.client.vo.req.GroupMessageReqVO;
 import com.gw.tim.client.vo.req.SingleMessageReqVO;
 import com.gw.tim.client.vo.res.TIMServerResVO;
 import com.gw.tim.client.service.EchoService;
@@ -16,6 +15,7 @@ import com.gw.tim.common.exception.TIMException;
 import com.gw.tim.common.res.BaseResponse;
 import com.gw.tim.gateway.api.RouteApi;
 import com.gw.tim.gateway.api.vo.req.ChatReqVO;
+import com.gw.tim.gateway.api.vo.req.GroupMessageReqVO;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 import org.slf4j.Logger;
@@ -50,10 +50,9 @@ public class RouteRequestImpl implements RouteRequest {
     @Override
     public void sendGroupMsg(GroupMessageReqVO groupMessageReqVO) throws Exception {
         RouteApi routeApi = new ProxyManager<>(RouteApi.class, gatewayUrl, okHttpClient).getInstance();
-        ChatReqVO chatReqVO = new ChatReqVO(groupMessageReqVO.getUserId(), groupMessageReqVO.getMsg());
         Response response = null;
         try {
-            response = (Response) routeApi.groupRoute(chatReqVO);
+            response = (Response) routeApi.groupRoute(groupMessageReqVO);
         } catch (Exception e) {
             LOGGER.error("exception", e);
         } finally {
@@ -118,6 +117,7 @@ public class RouteRequestImpl implements RouteRequest {
         } catch (Exception e) {
             LOGGER.error("exception", e);
         } finally {
+            assert response != null;
             response.body().close();
         }
 
@@ -138,9 +138,11 @@ public class RouteRequestImpl implements RouteRequest {
         } catch (Exception e) {
             LOGGER.error("exception", e);
         } finally {
+            assert response != null;
             response.body().close();
         }
 
+        assert onlineUsersResVO != null;
         return onlineUsersResVO.getDataBody();
     }
 
@@ -154,6 +156,7 @@ public class RouteRequestImpl implements RouteRequest {
         } catch (Exception e) {
             LOGGER.error("exception", e);
         } finally {
+            assert response != null;
             response.body().close();
         }
     }

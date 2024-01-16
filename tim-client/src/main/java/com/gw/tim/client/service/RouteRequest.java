@@ -1,10 +1,10 @@
 package com.gw.tim.client.service;
 
-import com.gw.tim.client.vo.req.GroupMessageReqVO;
 import com.gw.tim.client.vo.res.TIMServerResVO;
 import com.gw.tim.client.vo.req.LoginReqVO;
 import com.gw.tim.client.vo.req.SingleMessageReqVO;
 import com.gw.tim.client.vo.res.OnlineUsersResVO;
+import com.gw.tim.gateway.api.vo.req.GroupMessageReqVO;
 
 import java.util.List;
 
