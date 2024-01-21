@@ -64,7 +64,7 @@ public class MsgHandler implements MsgHandle {
             //私聊
             SingleMessageReqVO singleMessageReqVO = new SingleMessageReqVO();
             singleMessageReqVO.setUserId(configuration.getUserId());
-            singleMessageReqVO.setReceiveUserId(Long.parseLong(totalMsg[0]));
+            singleMessageReqVO.setToUserId(Long.parseLong(totalMsg[0]));
             singleMessageReqVO.setMsg(totalMsg[1]);
             try {
                 p2pChat(singleMessageReqVO);

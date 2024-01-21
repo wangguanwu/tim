@@ -18,7 +18,7 @@ public class SingleMessageReqVO extends BaseRequest {
 
     @NotNull(message = "userId 不能为空")
     //消息接收者的 userId
-    private Long receiveUserId;
+    private Long toUserId;
 
 
     @NotNull(message = "msg 不能为空")
@@ -27,18 +27,18 @@ public class SingleMessageReqVO extends BaseRequest {
     public SingleMessageReqVO() {
     }
 
-    public SingleMessageReqVO(Long userId, Long receiveUserId, String msg) {
+    public SingleMessageReqVO(Long userId, Long toUserId, String msg) {
         this.userId = userId;
-        this.receiveUserId = receiveUserId;
+        this.toUserId = toUserId;
         this.msg = msg;
     }
 
-    public Long getReceiveUserId() {
-        return receiveUserId;
+    public Long getToUserId() {
+        return toUserId;
     }
 
-    public void setReceiveUserId(Long receiveUserId) {
-        this.receiveUserId = receiveUserId;
+    public void setToUserId(Long toUserId) {
+        this.toUserId = toUserId;
     }
 
     public String getMsg() {

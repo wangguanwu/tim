@@ -20,12 +20,14 @@ public class SendMsgReqVO extends BaseRequest {
     private Long toUserId;
 
     @NotNull(message = "toUserId 不能为空")
-    private Long fromUserId;
+    private Long userId;
 
 
     @NotNull(message = "msg 不能为空")
     private String msg;
 
     private int type;
+
+    private Long msgId;
 
 }

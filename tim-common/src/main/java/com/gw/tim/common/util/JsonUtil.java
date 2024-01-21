@@ -32,8 +32,8 @@ public class JsonUtil {
             return objectMapper.writeValueAsString(object);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage() + " :" + object.getClass().getName());
         }
-        return null;
     }
 
     public static <T> T fromJson(String json, Class<T> clazz) {
@@ -41,8 +41,8 @@ public class JsonUtil {
             return (T)objectMapper.readValue(json, clazz);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
+            throw new RuntimeException("json is not valid. " + json);
         }
-        return null;
     }
 
     public static <T> T fromJson(String json, TypeReference<T> type){
@@ -50,7 +50,7 @@ public class JsonUtil {
             return (T)objectMapper.readValue(json, type);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
+            throw new RuntimeException("json is not valid. " + json);
         }
-        return null;
     }
 }

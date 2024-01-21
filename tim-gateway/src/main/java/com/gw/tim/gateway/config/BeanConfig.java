@@ -5,11 +5,15 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.gw.tim.common.route.algorithm.RouteHandle;
 import com.gw.tim.common.route.algorithm.consistenthash.AbstractConsistentHash;
+import com.gw.tim.gateway.service.PushMessageService;
+import com.gw.tim.gateway.service.impl.HttpPushMessgeServiceImpl;
+import com.gw.tim.gateway.service.impl.MqPushMessageServiceImpl;
 import okhttp3.OkHttpClient;
 import org.I0Itec.zkclient.ZkClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -97,5 +101,17 @@ public class BeanConfig {
 
         }
 
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "app.push", name = "type", havingValue = "http")
+    public PushMessageService httpPushMessageService() {
+        return new HttpPushMessgeServiceImpl();
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "app.push", name = "type", havingValue = "mq")
+    public PushMessageService mqPushMessageService() {
+        return new MqPushMessageServiceImpl();
     }
 }

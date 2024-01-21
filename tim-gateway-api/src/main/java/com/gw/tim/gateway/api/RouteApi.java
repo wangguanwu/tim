@@ -4,6 +4,8 @@ import com.gw.tim.common.res.BaseResponse;
 import com.gw.tim.gateway.api.vo.req.*;
 import com.gw.tim.gateway.api.vo.res.RegisterInfoResVO;
 
+import java.util.List;
+
 /**
  * Route Api
  *
@@ -64,4 +66,6 @@ public interface RouteApi {
      * @throws Exception
      */
     Object onlineUser() throws Exception;
+
+    BaseResponse<List<String>> getAllServerList() throws Exception;
 }

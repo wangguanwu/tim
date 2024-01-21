@@ -82,10 +82,10 @@ public class AccountServiceRedisImpl implements AccountService {
         }
 
         //登录成功，保存登录状态
-        boolean status = userInfoCacheService.saveAndCheckUserLoginStatus(loginReqVO.getUserId());
-        if (status == false) {
+        if (!userInfoCacheService.saveAndCheckUserLoginStatus(loginReqVO.getUserId())) {
             //重复登录
-            return StatusEnum.REPEAT_LOGIN;
+            LOGGER.warn("repeat login {}", loginReqVO.getUserName());
+            return StatusEnum.SUCCESS;
         }
 
         return StatusEnum.SUCCESS;
@@ -153,13 +153,16 @@ public class AccountServiceRedisImpl implements AccountService {
         ServerApi serverApi = new ProxyManager<>(ServerApi.class, url, okHttpClient).getInstance();
         SendMsgReqVO sendMsgReqVO = new SendMsgReqVO();
         BeanUtils.copyProperties(groupReqVO, sendMsgReqVO);
+        String msg = timUserInfo.getUserName() + ":" + groupReqVO.getMsg();
+        sendMsgReqVO.setMsg(msg);
         Response response = null;
         try {
+            LOGGER.info("start push message to server:{}", url);
             response = (Response) serverApi.sendMsg(sendMsgReqVO);
         } catch (Exception e) {
             LOGGER.error("Exception", e);
         } finally {
-            if (null != response) {
+            if (null != response && null != response.body()) {
                 response.body().close();
             }
         }

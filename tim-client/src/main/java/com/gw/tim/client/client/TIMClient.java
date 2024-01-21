@@ -13,6 +13,7 @@ import com.gw.tim.client.vo.req.LoginReqVO;
 import com.gw.tim.client.vo.res.TIMServerResVO;
 import com.gw.tim.common.constant.Constants;
 import com.gw.tim.common.protocol.TIMReqMsg;
+import com.gw.tim.common.util.JsonUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -127,6 +128,10 @@ public class TIMClient {
         TIMServerResVO.ServerInfo timServer = null;
         try {
             timServer = routeRequest.getTIMServer(loginReqVO);
+
+            if (timServer == null) {
+                throw new IllegalStateException("cannot find a  server for user " + JsonUtil.toJson(loginReqVO));
+            }
 
             //保存系统信息
             clientInfo.saveServiceInfo(timServer.getIp() + ":" + timServer.getTimServerPort())

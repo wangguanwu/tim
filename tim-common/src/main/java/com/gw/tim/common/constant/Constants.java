@@ -55,7 +55,9 @@ public class Constants {
         }
     }
 
-    public static final String MQ_MESSAGE_TOPIC = "tim-message";
+    public static final String MQ_MESSAGE_P2P_TOPIC = "tim-message-p2p";
+
+    public static final String MQ_MESSAGE_GROUP_TOPIC = "tim-message-group";
 
     public static final String MQ_MESSAGE_CONSUMER_TYPE_PERSISTENT = "tim-persistent-consumer";
 

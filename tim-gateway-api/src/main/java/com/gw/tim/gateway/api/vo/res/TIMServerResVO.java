@@ -42,4 +42,9 @@ public class TIMServerResVO implements Serializable {
     public void setHttpPort(Integer httpPort) {
         this.httpPort = httpPort;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s:%s:%s", ip, timServerPort, httpPort);
+    }
 }

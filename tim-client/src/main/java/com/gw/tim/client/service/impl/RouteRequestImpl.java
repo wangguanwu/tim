@@ -56,7 +56,9 @@ public class RouteRequestImpl implements RouteRequest {
         } catch (Exception e) {
             LOGGER.error("exception", e);
         } finally {
-            response.body().close();
+            if  (null != response && null != response.body()) {
+                response.close();
+            }
         }
     }
 
@@ -65,7 +67,7 @@ public class RouteRequestImpl implements RouteRequest {
         RouteApi routeApi = new ProxyManager<>(RouteApi.class, gatewayUrl, okHttpClient).getInstance();
         com.gw.tim.gateway.api.vo.req.SingleMessageReqVO vo = new com.gw.tim.gateway.api.vo.req.SingleMessageReqVO();
         vo.setMsg(singleMessageReqVO.getMsg());
-        vo.setReceiveUserId(singleMessageReqVO.getReceiveUserId());
+        vo.setToUserId(singleMessageReqVO.getToUserId());
         vo.setUserId(singleMessageReqVO.getUserId());
 
         Response response = null;
@@ -76,13 +78,15 @@ public class RouteRequestImpl implements RouteRequest {
 
             // account offline.
             if (baseResponse.getCode().equals(StatusEnum.OFF_LINE.getCode())) {
-                LOGGER.error(singleMessageReqVO.getReceiveUserId() + ":" + StatusEnum.OFF_LINE.getMessage());
+                LOGGER.error(singleMessageReqVO.getToUserId() + ":" + StatusEnum.OFF_LINE.getMessage());
             }
 
         } catch (Exception e) {
             LOGGER.error("exception", e);
         } finally {
-            response.body().close();
+            if (response.body() != null) {
+                response.body().close();
+            }
         }
     }
 
@@ -156,8 +160,9 @@ public class RouteRequestImpl implements RouteRequest {
         } catch (Exception e) {
             LOGGER.error("exception", e);
         } finally {
-            assert response != null;
-            response.body().close();
+           if (null != response && response.body() != null) {
+               response.body().close();
+           }
         }
     }
 }

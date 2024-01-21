@@ -3,7 +3,9 @@ package com.gw.tim.server.util;
 import com.gw.tim.common.pojo.TIMUserInfo;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -63,5 +65,8 @@ public class SessionSocketHolder {
         return null;
     }
 
+    public static Set<NioSocketChannel> getAllChannel() {
+        return new HashSet<>(CHANNEL_MAP.values());
+    }
 
 }

@@ -28,6 +28,9 @@ public class AppConfiguration {
     @Value("${app.route.way.consitenthash:com.tuling.tim.common.route.algorithm.consistenthash.TreeMapConsistentHash}")
     private String consistentHashWay;
 
+    @Value("${app.push.type}")
+    private String pushType;
+
     public int getZkConnectTimeout() {
         return zkConnectTimeout;
     }
@@ -70,5 +73,13 @@ public class AppConfiguration {
 
     public void setConsistentHashWay(String consistentHashWay) {
         this.consistentHashWay = consistentHashWay;
+    }
+
+    public void setPushType(String pushType) {
+        this.pushType = pushType;
+    }
+
+    public String getPushType() {
+        return this.pushType;
     }
 }

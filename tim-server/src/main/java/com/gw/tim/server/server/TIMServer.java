@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.net.InetSocketAddress;
+import java.util.Set;
 
 /**
  * @since JDK 1.8
@@ -91,5 +92,22 @@ public class TIMServer {
         ChannelFuture future = socketChannel.writeAndFlush(protocol);
         future.addListener((ChannelFutureListener) channelFuture ->
                 LOGGER.info("server push msg:[{}]", sendMsgReqVO));
+    }
+
+    public void sendGroupMsg(SendMsgReqVO sendMsgReqVO) {
+        Set<NioSocketChannel> socketChannelSet = SessionSocketHolder.getAllChannel();
+        Long fromUserId = sendMsgReqVO.getUserId();
+
+        // remove  sender channel to avoid sending the same msg to sender
+        NioSocketChannel nioSocketChannel = SessionSocketHolder.get(fromUserId);
+        socketChannelSet.remove(nioSocketChannel);
+
+        TIMReqMsg protocol = new TIMReqMsg(sendMsgReqVO.getToUserId(), JsonUtil.toJson(sendMsgReqVO), Constants.CommandType.MSG);
+
+        socketChannelSet.parallelStream().forEach(socketChannel -> {
+            ChannelFuture future = socketChannel.writeAndFlush(protocol);
+            future.addListener((ChannelFutureListener) channelFuture ->
+                    LOGGER.info("server push msg:[{}]", sendMsgReqVO));
+        });
     }
 }

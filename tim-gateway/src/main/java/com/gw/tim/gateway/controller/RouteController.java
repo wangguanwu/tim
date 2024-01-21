@@ -1,6 +1,5 @@
 package com.gw.tim.gateway.controller;
 
-import com.gw.tim.common.constant.Constants;
 import com.gw.tim.common.enums.StatusEnum;
 import com.gw.tim.common.exception.TIMException;
 import com.gw.tim.common.pojo.RouteInfo;
@@ -8,14 +7,17 @@ import com.gw.tim.common.pojo.TIMUserInfo;
 import com.gw.tim.common.res.BaseResponse;
 import com.gw.tim.common.res.NULLBody;
 import com.gw.tim.common.route.algorithm.RouteHandle;
+import com.gw.tim.common.util.JsonUtil;
 import com.gw.tim.common.util.RouteInfoParseUtil;
 import com.gw.tim.gateway.api.RouteApi;
 import com.gw.tim.gateway.api.vo.req.*;
 import com.gw.tim.gateway.api.vo.res.RegisterInfoResVO;
 import com.gw.tim.gateway.api.vo.res.TIMServerResVO;
 import com.gw.tim.gateway.cache.ServerCache;
+import com.gw.tim.gateway.kit.ZkUtils;
 import com.gw.tim.gateway.service.AccountService;
 import com.gw.tim.gateway.service.CommonBizService;
+import com.gw.tim.gateway.service.PushMessageService;
 import com.gw.tim.gateway.service.UserInfoCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -52,6 +54,12 @@ public class RouteController implements RouteApi {
     @Autowired
     private RouteHandle routeHandle;
 
+    @Autowired
+    private PushMessageService pushMessageService;
+
+    @Autowired
+    private ZkUtils zkUtils;
+
     /**
      * 群聊 API
      *
@@ -60,31 +68,14 @@ public class RouteController implements RouteApi {
      * @throws Exception
      */
     @RequestMapping(value = "groupRoute", method = RequestMethod.POST)
-    @ResponseBody()
+    @ResponseBody
     @Override
     public BaseResponse<NULLBody> groupRoute(@RequestBody GroupMessageReqVO groupReqVO) throws Exception {
         BaseResponse<NULLBody> res = new BaseResponse();
 
         LOGGER.info("msg=[{}]", groupReqVO.toString());
 
-        //获取所有的推送列表
-        Map<Long, TIMServerResVO> serverResVOMap = accountService.loadRouteRelated();
-        for (Map.Entry<Long, TIMServerResVO> timServerResVOEntry : serverResVOMap.entrySet()) {
-            Long toUserId = timServerResVOEntry.getKey();
-            TIMServerResVO serverInfo = timServerResVOEntry.getValue();
-            if (toUserId.equals(groupReqVO.getUserId())) {
-                //过滤掉自己
-                TIMUserInfo timUserInfo = userInfoCacheService.loadUserInfoByUserId(groupReqVO.getUserId());
-                LOGGER.warn("过滤掉了发送者 userId={}", timUserInfo.toString());
-                continue;
-            }
-
-            //推送消息
-            ChatReqVO chatVO = new ChatReqVO(toUserId, groupReqVO.getUserId(), groupReqVO.getMsg(), Constants.ChatType.GROUP.getType());
-            accountService.pushMsg(serverInfo, groupReqVO.getUserId(), chatVO);
-
-        }
-
+        pushMessageService.sendGroupMsg(groupReqVO);
         res.setCode(StatusEnum.SUCCESS.getCode());
         res.setMessage(StatusEnum.SUCCESS.getMessage());
         return res;
@@ -104,14 +95,7 @@ public class RouteController implements RouteApi {
         BaseResponse<NULLBody> res = new BaseResponse();
 
         try {
-            //获取接收消息用户的路由信息
-            TIMServerResVO TIMServerResVO = accountService.loadRouteRelatedByUserId(p2pRequest.getReceiveUserId());
-
-            //p2pRequest.getReceiveUserId()==>消息接收者的 userID
-            ChatReqVO chatVO = new ChatReqVO(p2pRequest.getReceiveUserId(), p2pRequest.getUserId(), p2pRequest.getMsg(),
-                    Constants.ChatType.SINGLE.getType());
-            accountService.pushMsg(TIMServerResVO, p2pRequest.getUserId(), chatVO);
-
+            pushMessageService.sendP2pMsg(p2pRequest);
             res.setCode(StatusEnum.SUCCESS.getCode());
             res.setMessage(StatusEnum.SUCCESS.getMessage());
 
@@ -155,7 +139,7 @@ public class RouteController implements RouteApi {
     @Override
     public BaseResponse<TIMServerResVO> login(@RequestBody LoginReqVO loginReqVO) throws Exception {
         BaseResponse<TIMServerResVO> res = new BaseResponse();
-
+        LOGGER.info("user start login: {}", JsonUtil.toJson(loginReqVO));
         //登录校验
         StatusEnum status = accountService.login(loginReqVO);
         if (status == StatusEnum.SUCCESS) {
@@ -174,6 +158,8 @@ public class RouteController implements RouteApi {
             TIMServerResVO vo = new TIMServerResVO(routeInfo);
             res.setDataBody(vo);
 
+        } else {
+            LOGGER.error("user login failed  {}", loginReqVO.getUserName());
         }
         res.setCode(status.getCode());
         res.setMessage(status.getMessage());
@@ -221,4 +207,19 @@ public class RouteController implements RouteApi {
     }
 
 
+    /**
+     * 获取所有可用server
+     *
+     * @return
+     */
+    @RequestMapping(value = "getAllServer", method = RequestMethod.GET)
+    @ResponseBody()
+    @Override
+    public BaseResponse<List<String>> getAllServerList() throws Exception {
+        BaseResponse<List<String>> res = new BaseResponse();
+        res.setDataBody(zkUtils.getAllNode());
+        res.setCode(StatusEnum.SUCCESS.getCode());
+        res.setMessage(StatusEnum.SUCCESS.getMessage());
+        return res;
+    }
 }

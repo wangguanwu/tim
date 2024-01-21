@@ -22,7 +22,7 @@ public class ChatReqVO extends BaseRequest {
     private Long toUserId;
 
     @NotNull(message = "toUserId 不能为空")
-    private Long fromUserId;
+    private Long userId;
 
 
     @NotNull(message = "msg 不能为空")
