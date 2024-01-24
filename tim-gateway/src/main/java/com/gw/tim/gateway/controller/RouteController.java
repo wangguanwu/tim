@@ -71,7 +71,7 @@ public class RouteController implements RouteApi {
     @ResponseBody
     @Override
     public BaseResponse<NULLBody> groupRoute(@RequestBody GroupMessageReqVO groupReqVO) throws Exception {
-        BaseResponse<NULLBody> res = new BaseResponse();
+        BaseResponse<NULLBody> res = new BaseResponse<>();
 
         LOGGER.info("msg={}", JsonUtil.toJson(groupReqVO));
 
@@ -92,7 +92,7 @@ public class RouteController implements RouteApi {
     @ResponseBody
     @Override
     public BaseResponse<NULLBody> p2pRoute(@RequestBody SingleMessageReqVO p2pRequest) throws Exception {
-        BaseResponse<NULLBody> res = new BaseResponse();
+        BaseResponse<NULLBody> res = new BaseResponse<>();
 
         try {
             pushMessageService.sendP2pMsg(p2pRequest);
@@ -117,7 +117,7 @@ public class RouteController implements RouteApi {
     @ResponseBody
     @Override
     public BaseResponse<NULLBody> offLine(@RequestBody ChatReqVO reqVo) throws Exception {
-        BaseResponse<NULLBody> res = new BaseResponse();
+        BaseResponse<NULLBody> res = new BaseResponse<>();
 
         TIMUserInfo timUserInfo = userInfoCacheService.loadUserInfoByUserId(reqVo.getToUserId());
 
@@ -138,7 +138,7 @@ public class RouteController implements RouteApi {
     @ResponseBody
     @Override
     public BaseResponse<TIMServerResVO> login(@RequestBody LoginReqVO loginReqVO) throws Exception {
-        BaseResponse<TIMServerResVO> res = new BaseResponse();
+        BaseResponse<TIMServerResVO> res = new BaseResponse<>();
         LOGGER.info("user start login: {}", JsonUtil.toJson(loginReqVO));
         //登录校验
         StatusEnum status = accountService.login(loginReqVO);
@@ -176,7 +176,7 @@ public class RouteController implements RouteApi {
     @ResponseBody()
     @Override
     public BaseResponse<RegisterInfoResVO> registerAccount(@RequestBody RegisterInfoReqVO registerInfoReqVO) throws Exception {
-        BaseResponse<RegisterInfoResVO> res = new BaseResponse();
+        BaseResponse<RegisterInfoResVO> res = new BaseResponse<>();
 
         long userId = System.currentTimeMillis();
         RegisterInfoResVO info = new RegisterInfoResVO(userId, registerInfoReqVO.getUserName());
@@ -197,8 +197,7 @@ public class RouteController implements RouteApi {
     @ResponseBody()
     @Override
     public BaseResponse<Set<TIMUserInfo>> onlineUser() throws Exception {
-        BaseResponse<Set<TIMUserInfo>> res = new BaseResponse();
-
+        BaseResponse<Set<TIMUserInfo>> res = new BaseResponse<>();
         Set<TIMUserInfo> timUserInfos = userInfoCacheService.onlineUser();
         res.setDataBody(timUserInfos);
         res.setCode(StatusEnum.SUCCESS.getCode());

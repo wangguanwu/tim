@@ -63,6 +63,8 @@ public class Constants {
 
     public static final String MQ_MESSAGE_CONSUMER_TYPE_FORWARD = "tim-forward-consumer";
 
+    public final static String USER_LOGIN_STATUS_PREFIX = "user-login-status";
+
 
 
 }

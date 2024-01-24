@@ -12,8 +12,14 @@ import lombok.ToString;
 @Data
 @ToString
 public class TIMUserInfo {
+
     private Long userId ;
+
     private String userName ;
+
+    private String gender;
+
+    private String userNick;
 
     public TIMUserInfo(Long userId, String userName) {
         this.userId = userId;

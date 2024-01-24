@@ -1,18 +1,20 @@
 package com.gw.tim.gateway.service.impl;
 
+import com.gw.tim.common.constant.Constants;
 import com.gw.tim.common.pojo.TIMUserInfo;
+import com.gw.tim.gateway.config.AppConfiguration;
 import com.gw.tim.gateway.service.UserInfoCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.gw.tim.gateway.constant.Constant.ACCOUNT_PREFIX;
-import static com.gw.tim.gateway.constant.Constant.LOGIN_STATUS_PREFIX;
 
 /**
  * @since JDK 1.8
@@ -27,6 +29,9 @@ public class UserInfoCacheServiceImpl implements UserInfoCacheService {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private AppConfiguration appConfiguration;
 
     @Override
     public TIMUserInfo loadUserInfoByUserId(Long userId) {
@@ -49,29 +54,30 @@ public class UserInfoCacheServiceImpl implements UserInfoCacheService {
 
     @Override
     public boolean saveAndCheckUserLoginStatus(Long userId) throws Exception {
+        return Boolean.TRUE.equals(redisTemplate.opsForZSet().add(Constants.USER_LOGIN_STATUS_PREFIX, userId.toString(),
+                System.currentTimeMillis()));
 
-        Long add = redisTemplate.opsForSet().add(LOGIN_STATUS_PREFIX, userId.toString());
-        return add.intValue() != 0;
     }
 
     @Override
     public void removeLoginStatus(Long userId) throws Exception {
-        redisTemplate.opsForSet().remove(LOGIN_STATUS_PREFIX, userId.toString());
+        redisTemplate.opsForZSet().remove(Constants.USER_LOGIN_STATUS_PREFIX, userId.toString());
     }
 
     @Override
     public Set<TIMUserInfo> onlineUser() {
-        Set<TIMUserInfo> set = null;
-        Set<String> members = redisTemplate.opsForSet().members(LOGIN_STATUS_PREFIX);
-        for (String member : members) {
-            if (set == null) {
-                set = new HashSet<>(64);
-            }
-            TIMUserInfo timUserInfo = loadUserInfoByUserId(Long.valueOf(member));
-            set.add(timUserInfo);
+        Set<TIMUserInfo> onlineUserSet = new LinkedHashSet<>();
+        long timeoutMs = appConfiguration.getUserStatusTimeoutSec() * 1000L;
+        Set<String> members = redisTemplate.opsForZSet().rangeByScore(Constants.USER_LOGIN_STATUS_PREFIX,
+                System.currentTimeMillis() - timeoutMs, System.currentTimeMillis() + 60 * 1000L);
+        if (null == members) {
+            return onlineUserSet;
         }
-
-        return set;
+        for (String member : members) {
+            TIMUserInfo timUserInfo = loadUserInfoByUserId(Long.valueOf(member));
+            onlineUserSet.add(timUserInfo);
+        }
+        return onlineUserSet;
     }
 
 }

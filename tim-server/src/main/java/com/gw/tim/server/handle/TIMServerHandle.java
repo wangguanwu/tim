@@ -8,6 +8,7 @@ import com.gw.tim.common.protocol.TIMReqMsg;
 import com.gw.tim.common.util.NettyAttrUtil;
 import com.gw.tim.server.kit.RouteHandler;
 import com.gw.tim.server.kit.ServerHeartBeatHandlerImpl;
+import com.gw.tim.server.service.UserStatusService;
 import com.gw.tim.server.util.SessionSocketHolder;
 import com.gw.tim.server.util.SpringBeanFactory;
 import io.netty.channel.ChannelFutureListener;
@@ -19,6 +20,10 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+
+import java.util.Set;
 
 /**
  * @since JDK 1.8
@@ -27,6 +32,9 @@ import org.slf4j.LoggerFactory;
 public class TIMServerHandle extends SimpleChannelInboundHandler<TIMReqMsg> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TIMReqMsg.class);
+
+    private static final long REFRESH_STATUS_TIME_INTERVAL_MS = 15 * 1000L;
+
 
 
     /**
@@ -78,6 +86,19 @@ public class TIMServerHandle extends SimpleChannelInboundHandler<TIMReqMsg> {
 
         //心跳更新时间
         if (msg.getType() == Constants.CommandType.PING) {
+            Long lastTime = NettyAttrUtil.getReaderTime(ctx.channel());
+            long currentTime = System.currentTimeMillis();
+            if (msg.getRequestId() == null) {
+               LOGGER.error("PING error. requestId is null");
+                SessionSocketHolder.remove((NioSocketChannel) ctx.channel());
+                ctx.channel().close();
+                return;
+            }
+            if (null != lastTime &&  (currentTime - lastTime) > REFRESH_STATUS_TIME_INTERVAL_MS) {
+                //超过REFRESH_STATUS_TIME_INTERVAL_MS会更新redis状态
+                UserStatusService userStatusService = SpringBeanFactory.getBean(UserStatusService.class);
+                userStatusService.refreshUserOnlineStatus(msg.getRequestId());
+            }
             NettyAttrUtil.updateReaderTime(ctx.channel(), System.currentTimeMillis());
             //向客户端响应 pong 消息
             TIMReqMsg heartBeat = SpringBeanFactory.getBean("heartBeat",
@@ -98,7 +119,6 @@ public class TIMServerHandle extends SimpleChannelInboundHandler<TIMReqMsg> {
         if (TIMException.isResetByPeer(cause.getMessage())) {
             return;
         }
-
         LOGGER.error(cause.getMessage(), cause);
 
     }

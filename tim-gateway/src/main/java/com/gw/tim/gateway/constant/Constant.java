@@ -16,10 +16,4 @@ public final class Constant {
      */
     public final static String ROUTE_PREFIX = "tim-route:";
 
-    /**
-     * 登录状态前缀
-     */
-    public final static String LOGIN_STATUS_PREFIX = "login-status";
-
-
 }

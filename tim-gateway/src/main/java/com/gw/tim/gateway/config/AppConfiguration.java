@@ -31,6 +31,9 @@ public class AppConfiguration {
     @Value("${app.push.type}")
     private String pushType;
 
+    @Value("${app.user.status.timeoutSec}")
+    private int userStatusTimeoutSec = 3600;
+
     public int getZkConnectTimeout() {
         return zkConnectTimeout;
     }
@@ -81,5 +84,13 @@ public class AppConfiguration {
 
     public String getPushType() {
         return this.pushType;
+    }
+
+    public int getUserStatusTimeoutSec() {
+        return userStatusTimeoutSec;
+    }
+
+    public void setUserStatusTimeoutSec(int userStatusTimeoutSec) {
+        this.userStatusTimeoutSec = userStatusTimeoutSec;
     }
 }

@@ -50,8 +50,7 @@ public class BeanConfig {
      */
     @Bean(value = "heartBeat")
     public TIMReqMsg heartBeat() {
-        TIMReqMsg heart = new TIMReqMsg(userId, "ping", Constants.CommandType.PING);
-        return heart;
+        return new TIMReqMsg(userId, "ping", Constants.CommandType.PING);
     }
 
 
