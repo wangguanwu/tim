@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.gw.tim.client.config.AppConfiguration;
 import com.gw.tim.client.service.RouteRequest;
 import com.gw.tim.client.thread.ContextHolder;
-import com.gw.tim.client.vo.req.SingleMessageReqVO;
 import com.gw.tim.client.vo.res.TIMServerResVO;
 import com.gw.tim.client.service.EchoService;
 import com.gw.tim.client.vo.req.LoginReqVO;
@@ -16,6 +15,7 @@ import com.gw.tim.common.res.BaseResponse;
 import com.gw.tim.gateway.api.RouteApi;
 import com.gw.tim.gateway.api.vo.req.ChatReqVO;
 import com.gw.tim.gateway.api.vo.req.GroupMessageReqVO;
+import com.gw.tim.gateway.api.vo.req.SingleMessageReqVO;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 import org.slf4j.Logger;
@@ -65,14 +65,9 @@ public class RouteRequestImpl implements RouteRequest {
     @Override
     public void sendP2PMsg(SingleMessageReqVO singleMessageReqVO) throws Exception {
         RouteApi routeApi = new ProxyManager<>(RouteApi.class, gatewayUrl, okHttpClient).getInstance();
-        com.gw.tim.gateway.api.vo.req.SingleMessageReqVO vo = new com.gw.tim.gateway.api.vo.req.SingleMessageReqVO();
-        vo.setMsg(singleMessageReqVO.getMsg());
-        vo.setToUserId(singleMessageReqVO.getToUserId());
-        vo.setUserId(singleMessageReqVO.getUserId());
-
         Response response = null;
         try {
-            response = (Response) routeApi.p2pRoute(vo);
+            response = (Response) routeApi.p2pRoute(singleMessageReqVO);
             String json = response.body().string();
             BaseResponse baseResponse = JSON.parseObject(json, BaseResponse.class);
 

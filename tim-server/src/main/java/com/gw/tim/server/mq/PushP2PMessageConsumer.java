@@ -6,6 +6,7 @@ import com.gw.tim.server.api.vo.mq.MqSingleMessageReqVO;
 import com.gw.tim.server.api.vo.req.SendMsgReqVO;
 import com.gw.tim.server.server.TIMServer;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.spring.annotation.MessageModel;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.beans.BeanUtils;
@@ -19,7 +20,8 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@RocketMQMessageListener(topic = Constants.MQ_MESSAGE_GROUP_TOPIC, consumerGroup = Constants.MQ_MESSAGE_CONSUMER_TYPE_FORWARD)
+@RocketMQMessageListener(topic = Constants.MQ_MESSAGE_P2P_TOPIC, consumerGroup = Constants.MQ_MESSAGE_CONSUMER_TYPE_FORWARD
+, messageModel = MessageModel.BROADCASTING)
 public class PushP2PMessageConsumer implements RocketMQListener<String> {
 
     @Autowired

@@ -3,9 +3,11 @@ package com.gw.tim.client.config;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.gw.tim.client.handle.MsgHandleCaller;
 import com.gw.tim.client.service.impl.MsgCallBackListener;
+import com.gw.tim.client.util.SnowflakeIdWorker;
 import com.gw.tim.common.constant.Constants;
 import com.gw.tim.common.data.construct.RingBufferWheel;
 import com.gw.tim.common.protocol.TIMReqMsg;
+import lombok.Data;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import java.util.concurrent.*;
  * @since JDK 1.8
  */
 @Configuration
+@Data
 public class BeanConfig {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(BeanConfig.class);
@@ -33,6 +36,12 @@ public class BeanConfig {
     @Value("${tim.callback.thread.pool.size}")
     private int poolSize;
 
+    @Value("${tim.worker.id}")
+    private int workerId;
+
+
+    @Value("${tim.dateCenter.id}")
+    private int dataCenterId;
 
     /**
      * 创建心跳单例
@@ -108,4 +117,13 @@ public class BeanConfig {
         return new RingBufferWheel(executorService);
     }
 
+    @Bean
+    public SnowflakeIdWorker msgIdGenerator() {
+        return new SnowflakeIdWorker(workerId, dataCenterId);
+    }
+
+    @Bean
+    public SnowflakeIdWorker requestIdGenerator() {
+        return new SnowflakeIdWorker(workerId, dataCenterId);
+    }
 }

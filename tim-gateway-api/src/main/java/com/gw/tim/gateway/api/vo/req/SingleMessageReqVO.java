@@ -1,6 +1,9 @@
 package com.gw.tim.gateway.api.vo.req;
 
 import com.gw.tim.common.req.BaseRequest;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
@@ -9,6 +12,10 @@ import javax.validation.constraints.NotNull;
  *
  * @since JDK 1.8
  */
+
+@Data
+@ToString
+@AllArgsConstructor
 public class SingleMessageReqVO extends BaseRequest {
 
     @NotNull(message = "userId 不能为空")
@@ -24,44 +31,8 @@ public class SingleMessageReqVO extends BaseRequest {
     @NotNull(message = "msg 不能为空")
     private String msg;
 
+    private Long msgId;
+
     public SingleMessageReqVO() {
-    }
-
-    public SingleMessageReqVO(Long userId, Long toUserId, String msg) {
-        this.userId = userId;
-        this.toUserId = toUserId;
-        this.msg = msg;
-    }
-
-    public Long getToUserId() {
-        return toUserId;
-    }
-
-    public void setToUserId(Long toUserId) {
-        this.toUserId = toUserId;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    @Override
-    public String toString() {
-        return "GroupReqVO{" +
-                "userId=" + userId +
-                ", msg='" + msg + '\'' +
-                "} " + super.toString();
     }
 }

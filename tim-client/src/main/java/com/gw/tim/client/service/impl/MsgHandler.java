@@ -2,16 +2,18 @@ package com.gw.tim.client.service.impl;
 
 import com.gw.tim.client.config.AppConfiguration;
 import com.gw.tim.client.service.*;
-import com.gw.tim.client.vo.req.SingleMessageReqVO;
+import com.gw.tim.client.util.SnowflakeIdWorker;
 import com.gw.tim.client.client.TIMClient;
 import com.gw.tim.common.util.StringUtil;
 import com.gw.tim.gateway.api.vo.req.GroupMessageReqVO;
+import com.gw.tim.gateway.api.vo.req.SingleMessageReqVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.UUID;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +44,13 @@ public class MsgHandler implements MsgHandle {
     @Autowired
     private InnerCommandContext innerCommandContext;
 
+    @Resource
+    private SnowflakeIdWorker msgIdGenerator;
+
+
+    @Resource
+    private SnowflakeIdWorker requestIdGenerator;
+
     private boolean aiModel = false;
 
     @Override
@@ -60,12 +69,18 @@ public class MsgHandler implements MsgHandle {
      */
     private void normalChat(String msg) {
         String[] totalMsg = msg.split("::");
+        long msgId = msgIdGenerator.nextId();
+        int timeStamp = (int)(System.currentTimeMillis()/1000);
+        Long requestId = requestIdGenerator.nextId();
         if (totalMsg.length > 1) {
             //私聊
             SingleMessageReqVO singleMessageReqVO = new SingleMessageReqVO();
             singleMessageReqVO.setUserId(configuration.getUserId());
             singleMessageReqVO.setToUserId(Long.parseLong(totalMsg[0]));
             singleMessageReqVO.setMsg(totalMsg[1]);
+            singleMessageReqVO.setMsgId(msgId);
+            singleMessageReqVO.setTimeStamp(timeStamp);
+            singleMessageReqVO.setReqNo(requestId.toString());
             try {
                 p2pChat(singleMessageReqVO);
             } catch (Exception e) {
@@ -75,10 +90,13 @@ public class MsgHandler implements MsgHandle {
         } else {
             //群聊
             GroupMessageReqVO groupMessageReqVO = GroupMessageReqVO.builder()
-                    .groupId(null)
+                    .groupId(0L)
                     .msg(msg)
                     .userId(configuration.getUserId())
                     .build();
+            groupMessageReqVO.setReqNo(requestId.toString());
+            groupMessageReqVO.setMsgId(msgId);
+            groupMessageReqVO.setTimeStamp(timeStamp);
             try {
                 groupChat(groupMessageReqVO);
             } catch (Exception e) {
@@ -108,9 +126,7 @@ public class MsgHandler implements MsgHandle {
 
     @Override
     public void p2pChat(SingleMessageReqVO singleMessageReqVO) throws Exception {
-
         routeRequest.sendP2PMsg(singleMessageReqVO);
-
     }
 
     @Override

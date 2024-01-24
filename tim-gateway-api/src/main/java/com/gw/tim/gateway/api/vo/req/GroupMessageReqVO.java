@@ -27,6 +27,8 @@ public class GroupMessageReqVO extends BaseRequest {
 
     private Long groupId;
 
+    private Long msgId;
+
     public GroupMessageReqVO() {
 
     }

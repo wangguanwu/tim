@@ -73,7 +73,7 @@ public class RouteController implements RouteApi {
     public BaseResponse<NULLBody> groupRoute(@RequestBody GroupMessageReqVO groupReqVO) throws Exception {
         BaseResponse<NULLBody> res = new BaseResponse();
 
-        LOGGER.info("msg=[{}]", groupReqVO.toString());
+        LOGGER.info("msg={}", JsonUtil.toJson(groupReqVO));
 
         pushMessageService.sendGroupMsg(groupReqVO);
         res.setCode(StatusEnum.SUCCESS.getCode());

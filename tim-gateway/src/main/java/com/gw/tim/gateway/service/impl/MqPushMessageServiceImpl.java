@@ -34,6 +34,7 @@ public class MqPushMessageServiceImpl implements PushMessageService {
     @Override
     @Async
     public void sendGroupMsg(GroupMessageReqVO groupMessageReqVO) throws Exception {
+        log.info("start push message to mq:{}", JsonUtil.toJson(groupMessageReqVO));
         boolean res =  rocketMqMessageProducer.syncSendMsg(Constants.MQ_MESSAGE_GROUP_TOPIC, JsonUtil.toJson(groupMessageReqVO));
 
         if (!res) {

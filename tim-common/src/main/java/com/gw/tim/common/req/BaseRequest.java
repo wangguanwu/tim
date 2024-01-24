@@ -1,8 +1,12 @@
 package com.gw.tim.common.req;
 
+import lombok.Data;
+
 /**
  * @since JDK 1.8
  */
+
+@Data
 public class BaseRequest {
 
 

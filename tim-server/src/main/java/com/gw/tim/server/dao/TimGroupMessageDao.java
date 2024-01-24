@@ -20,7 +20,7 @@ public class TimGroupMessageDao {
 
     public int insertMessage(TimGroupMessage timGroupMessage)  {
         //SQL
-        String sql = " INSERT INTO tim_group_message (msg_id , user_id , groupId, msg) values(?,?,?,?)";
+        String sql = " INSERT INTO tim_group_message (msg_id , user_id , group_id, msg) values(?,?,?,?)";
         //执行写入
         return jdbcTemplate.update(sql, timGroupMessage.getMsgId(), timGroupMessage.getUserId(),
                 timGroupMessage.getGroupId(), timGroupMessage.getMsg());
