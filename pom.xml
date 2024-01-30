@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.gw.netty</groupId>
+    <groupId>com.gw.tim</groupId>
     <artifactId>tim</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -37,29 +37,29 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.gw.netty</groupId>
+                <groupId>com.gw.tim</groupId>
                 <artifactId>tim-common</artifactId>
                 <version>${tim.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.gw.netty</groupId>
+                <groupId>com.gw.tim</groupId>
                 <artifactId>tim-server-api</artifactId>
                 <version>${tim.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.gw.netty</groupId>
+                <groupId>com.gw.tim</groupId>
                 <artifactId>tim-client</artifactId>
                 <version>${tim.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.gw.netty</groupId>
+                <groupId>com.gw.tim</groupId>
                 <artifactId>tim-gateway-api</artifactId>
                 <version>${tim.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.gw.netty</groupId>
+                <groupId>com.gw.tim</groupId>
                 <artifactId>tim-gateway</artifactId>
                 <version>${tim.version}</version>
             </dependency>
@@ -148,19 +148,27 @@
 
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.3.2.RELEASE</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>2.3.2.RELEASE</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.10.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>

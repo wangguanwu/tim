@@ -5,6 +5,7 @@ import com.gw.tim.common.exception.TIMException;
 import com.gw.tim.common.kit.HeartBeatHandler;
 import com.gw.tim.common.pojo.TIMUserInfo;
 import com.gw.tim.common.protocol.TIMReqMsg;
+import com.gw.tim.common.util.JsonUtil;
 import com.gw.tim.common.util.NettyAttrUtil;
 import com.gw.tim.server.kit.RouteHandler;
 import com.gw.tim.server.kit.ServerHeartBeatHandlerImpl;
@@ -75,7 +76,6 @@ public class TIMServerHandle extends SimpleChannelInboundHandler<TIMReqMsg> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TIMReqMsg msg) throws Exception {
-        LOGGER.info("received msg=[{}]", msg.toString());
 
         if (msg.getType() == Constants.CommandType.LOGIN) {
             //保存客户端与 Channel 之间的关系
@@ -109,6 +109,8 @@ public class TIMServerHandle extends SimpleChannelInboundHandler<TIMReqMsg> {
                     future.channel().close();
                 }
             });
+        } else {
+            LOGGER.info("received msg: {}", JsonUtil.toJson(msg));
         }
 
     }

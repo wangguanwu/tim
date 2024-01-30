@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>tim</artifactId>
-        <groupId>com.gw.netty</groupId>
+        <groupId>com.gw.tim</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -20,7 +20,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.gw.netty</groupId>
+            <groupId>com.gw.tim</groupId>
             <artifactId>tim-common</artifactId>
             <exclusions>
                 <exclusion>
@@ -31,12 +31,12 @@
         </dependency>
 
         <dependency>
-            <groupId>com.gw.netty</groupId>
+            <groupId>com.gw.tim</groupId>
             <artifactId>tim-gateway-api</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.gw.netty</groupId>
+            <groupId>com.gw.tim</groupId>
             <artifactId>tim-server-api</artifactId>
         </dependency>
 

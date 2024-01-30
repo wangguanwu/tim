@@ -84,7 +84,7 @@ public class TIMServer {
         NioSocketChannel socketChannel = SessionSocketHolder.get(sendMsgReqVO.getToUserId());
 
         if (null == socketChannel) {
-            LOGGER.error("client {} offline!", sendMsgReqVO.getToUserId());
+            LOGGER.warn("client {} offline or not current service", sendMsgReqVO.getToUserId());
             return;
         }
         TIMReqMsg protocol = new TIMReqMsg(sendMsgReqVO.getToUserId(), JsonUtil.toJson(sendMsgReqVO), Constants.CommandType.MSG);

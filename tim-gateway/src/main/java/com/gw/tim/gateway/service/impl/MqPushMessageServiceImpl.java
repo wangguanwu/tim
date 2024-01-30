@@ -24,21 +24,24 @@ public class MqPushMessageServiceImpl implements PushMessageService {
     @Override
     public void sendP2pMsg(SingleMessageReqVO singleMessageReqVO) throws Exception {
 
+        log.info("start push single message to mq===>:{}", JsonUtil.toJson(singleMessageReqVO));
         boolean res = rocketMqMessageProducer.syncSendMsg(Constants.MQ_MESSAGE_P2P_TOPIC, JsonUtil.toJson(singleMessageReqVO));
         if (!res) {
             throw new RuntimeException("Send p2p msg failed." + JsonUtil.toJson(singleMessageReqVO));
         }
+        log.info("end push single message to mq <====");
 
     }
 
     @Override
     @Async
     public void sendGroupMsg(GroupMessageReqVO groupMessageReqVO) throws Exception {
-        log.info("start push message to mq:{}", JsonUtil.toJson(groupMessageReqVO));
+        log.info("start push group message to mq:{}", JsonUtil.toJson(groupMessageReqVO));
         boolean res =  rocketMqMessageProducer.syncSendMsg(Constants.MQ_MESSAGE_GROUP_TOPIC, JsonUtil.toJson(groupMessageReqVO));
 
         if (!res) {
             throw new RuntimeException("Send msg failed." + JsonUtil.toJson(groupMessageReqVO));
         }
+        log.info("end push group message to mq <====");
     }
 }
