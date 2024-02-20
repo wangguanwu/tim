@@ -36,7 +36,7 @@ public class TIMServer {
     private EventLoopGroup work = new NioEventLoopGroup();
 
 
-    @Value("${tim.server.port}")
+    @Value("${app.server.port}")
     private int nettyPort;
 
 

@@ -18,7 +18,7 @@ public class AppConfiguration {
     @Value("${app.zk.switch}")
     private boolean zkSwitch;
 
-    @Value("${tim.server.port}")
+    @Value("${app.server.port}")
     private int timServerPort;
 
     @Value("${tim.gateway.url}")
