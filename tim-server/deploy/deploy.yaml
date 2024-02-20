@@ -1,0 +1,136 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: tim-server
+  name: tim-server
+  namespace: tim-sit
+spec:
+  ports:
+    - port: 9003
+      protocol: TCP
+      targetPort: 9003
+      name: tcp
+    - port: 8083
+      protocol: TCP
+      targetPort: 8083
+      name: http
+  selector:
+    app: tim-server
+status:
+  loadBalancer: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: tim-server
+  name: tim-server
+  namespace: tim-sit
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tim-server
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: tim-server
+    spec:
+      containers:
+        - image: tim-server:1.0
+          name: tim-server
+          resources: {}
+          env:
+            - name: ZOOKEEPER_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: tim-app-config
+                  key: zookeeper_server
+            - name: TIM_GATEWAY_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: tim-app-config
+                  key: time_gateway_host
+            - name: MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: tim-app-config
+                  key: mysql_host
+            - name: ROCKETMQ_NAMESERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: tim-app-config
+                  key: rocketmq_nameserver
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: tim-app-config
+                  key: redis_host
+            - name: APP_LOG_HOME
+              valueFrom:
+                configMapKeyRef:
+                  name: tim-app-config
+                  key: app_log_dir
+            - name: APP_ACTIVE_PROFILE
+              valueFrom:
+                configMapKeyRef:
+                  name: tim-app-config
+                  key: spring_profiles_active
+            - name: MYSQL_USER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: tim-app-secret
+                  key: mysql.username
+            - name: MYSQL_USER_PASSWD
+              valueFrom:
+                secretKeyRef:
+                  name: tim-app-secret
+                  key: mysql.password
+          volumeMounts:
+            - name: config
+              mountPath: "/config"
+              readOnly: true
+            - name: secret-volume
+              mountPath: "/secret-volume"
+      volumes:
+        - name: config
+          configMap:
+            name: tim-app-config
+        - name: secret-volume
+          secret:
+            secretName: tim-app-secret
+
+status: {}
+
+---
+apiVersion: v1
+data:
+  zookeeper_server: "192.168.201.129:2181"
+  time_gateway_host: "tim-gateway"
+  mysql_host: "192.168.0.132"
+  rocketmq_nameserver: "192.168.201.129:9876"
+  app_log_dir: "/var/log"
+  redis_host: "192.168.201.129"
+  spring_profiles_active: "sit"
+
+kind: ConfigMap
+metadata:
+  name: tim-app-config
+  namespace: tim-sit
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tim-app-secret
+  namespace: tim-sit
+type: Opaque
+data:
+  mysql.username: cm9vdA==
+  mysql.password: MTIzNDU2
