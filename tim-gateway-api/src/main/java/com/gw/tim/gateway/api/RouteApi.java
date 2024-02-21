@@ -5,6 +5,7 @@ import com.gw.tim.gateway.api.vo.req.*;
 import com.gw.tim.gateway.api.vo.res.RegisterInfoResVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Route Api
@@ -68,4 +69,6 @@ public interface RouteApi {
     Object onlineUser() throws Exception;
 
     BaseResponse<List<String>> getAllServerList() throws Exception;
+
+    Object getUserInfo(Map<String, Object> map) throws Exception;
 }

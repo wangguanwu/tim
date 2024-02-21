@@ -3,8 +3,10 @@ package com.gw.tim.client.handle;
 import com.gw.tim.client.service.ShutDownMsg;
 import com.gw.tim.client.service.EchoService;
 import com.gw.tim.client.service.ReConnectManager;
+import com.gw.tim.client.service.UserService;
 import com.gw.tim.client.service.impl.EchoServiceImpl;
 import com.gw.tim.client.util.SpringBeanFactory;
+import com.gw.tim.client.vo.UserInfo;
 import com.gw.tim.common.constant.Constants;
 import com.gw.tim.common.protocol.TIMReqMsg;
 import com.gw.tim.common.util.JsonUtil;
@@ -40,6 +42,8 @@ public class TIMClientHandle extends SimpleChannelInboundHandler<TIMReqMsg> {
     private ShutDownMsg shutDownMsg;
 
     private EchoService echoService;
+
+    private UserService userService;
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
@@ -107,10 +111,19 @@ public class TIMClientHandle extends SimpleChannelInboundHandler<TIMReqMsg> {
 
             //将消息中的 emoji 表情格式化为 Unicode 编码以便在终端可以显示
             String response = EmojiParser.parseToUnicode(chatReqVO.getMsg());
-            echoService.echo(response);
+
+            echoService.echo(String.format("[%s]:%s", getUserName(chatReqVO.getUserId()), response));
         }
 
+    }
 
+    private String getUserName(Long userId) {
+        if (userService == null) {
+            userService = SpringBeanFactory.getBean(UserService.class);
+        }
+        final UserInfo userInfo = userService.getUserInfo(userId);
+
+        return userInfo.getUserName();
     }
 
     /**

@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -159,5 +160,25 @@ public class RouteRequestImpl implements RouteRequest {
                response.body().close();
            }
         }
+    }
+
+    @Override
+    public OnlineUsersResVO getUserInfo(Long userId) {
+        RouteApi routeApi = new ProxyManager<>(RouteApi.class, gatewayUrl, okHttpClient).getInstance();
+        Response response = null;
+        OnlineUsersResVO onlineUsersResVO = null;
+        try {
+            response = (Response) routeApi.getUserInfo(Collections.singletonMap("userId", userId));
+            String json = response.body().string();
+            onlineUsersResVO = JSON.parseObject(json, OnlineUsersResVO.class);
+
+        } catch (Exception e) {
+            LOGGER.error("exception", e);
+        } finally {
+            if (null != response && response.body() != null) {
+                response.body().close();
+            }
+        }
+        return onlineUsersResVO;
     }
 }

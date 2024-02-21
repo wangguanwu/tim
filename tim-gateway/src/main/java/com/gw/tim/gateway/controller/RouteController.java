@@ -23,12 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -183,6 +181,17 @@ public class RouteController implements RouteApi {
         info = accountService.register(info);
 
         res.setDataBody(info);
+        res.setCode(StatusEnum.SUCCESS.getCode());
+        res.setMessage(StatusEnum.SUCCESS.getMessage());
+        return res;
+    }
+
+    @RequestMapping(value = "getUserInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<RegisterInfoResVO> getUserInfo(@RequestBody Map<String, Object> map) throws Exception {
+        Long userId = (Long) map.get("userId");
+        BaseResponse<RegisterInfoResVO> res = new BaseResponse<>();
+        res.setDataBody(accountService.getUserInfo(userId));
         res.setCode(StatusEnum.SUCCESS.getCode());
         res.setMessage(StatusEnum.SUCCESS.getMessage());
         return res;

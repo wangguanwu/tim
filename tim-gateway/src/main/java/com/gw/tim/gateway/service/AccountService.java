@@ -75,4 +75,13 @@ public interface AccountService {
      * @throws Exception
      */
     void offLine(Long userId) throws Exception;
+
+    /**
+     * 获取用户信息
+     *
+     * @param userId 用户信息
+     * @return
+     * @throws Exception
+     */
+    RegisterInfoResVO getUserInfo(Long userId);
 }

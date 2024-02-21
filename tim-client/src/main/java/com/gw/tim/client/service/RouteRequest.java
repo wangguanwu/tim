@@ -47,4 +47,6 @@ public interface RouteRequest {
 
     void offLine() ;
 
+    OnlineUsersResVO getUserInfo(Long userId);
+
 }

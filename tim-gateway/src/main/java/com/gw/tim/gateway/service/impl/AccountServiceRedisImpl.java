@@ -179,4 +179,16 @@ public class AccountServiceRedisImpl implements AccountService {
         //删除登录状态
         userInfoCacheService.removeLoginStatus(userId);
     }
+
+    @Override
+    public RegisterInfoResVO getUserInfo(Long userId) {
+        String key = ACCOUNT_PREFIX + userId;
+
+        String name = redisTemplate.opsForValue().get(key);
+
+        if (null == name) {
+            throw new RuntimeException("user not exist");
+        }
+        return new RegisterInfoResVO(userId, name);
+    }
 }

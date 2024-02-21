@@ -13,7 +13,7 @@ import io.netty.handler.timeout.IdleStateHandler;
  */
 public class TIMClientHandleInitializer extends ChannelInitializer<Channel> {
 
-    private final com.gw.tim.client.handle.TIMClientHandle TIMClientHandle = new TIMClientHandle();
+    private final TIMClientHandle TIMClientHandle = new TIMClientHandle();
 
     @Override
     protected void initChannel(Channel ch) throws Exception {
