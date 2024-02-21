@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@RocketMQMessageListener(topic = Constants.MQ_MESSAGE_GROUP_TOPIC, consumerGroup = Constants.MQ_MESSAGE_CONSUMER_TYPE_FORWARD,
+@RocketMQMessageListener(topic = Constants.MQ_MESSAGE_GROUP_TOPIC, consumerGroup = Constants.MQ_GROUP_MESSAGE_CONSUMER_TYPE_FORWARD,
 messageModel = MessageModel.BROADCASTING)
 public class PushGroupMessageConsumer implements RocketMQListener<String> {
 

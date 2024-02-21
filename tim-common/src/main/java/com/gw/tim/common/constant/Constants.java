@@ -59,9 +59,13 @@ public class Constants {
 
     public static final String MQ_MESSAGE_GROUP_TOPIC = "tim-message-group";
 
-    public static final String MQ_MESSAGE_CONSUMER_TYPE_PERSISTENT = "tim-persistent-consumer";
+    public static final String MQ_GROUP_MESSAGE_CONSUMER_TYPE_PERSISTENT = "tim-persistent-consumer-group";
 
-    public static final String MQ_MESSAGE_CONSUMER_TYPE_FORWARD = "tim-forward-consumer";
+    public static final String MQ_SINGLE_MESSAGE_CONSUMER_TYPE_PERSISTENT = "tim-persistent-consumer-single";
+
+    public static final String MQ_GROUP_MESSAGE_CONSUMER_TYPE_FORWARD = "tim-forward-consumer-group";
+
+    public static final String MQ_SINGLE_MESSAGE_CONSUMER_TYPE_FORWARD = "tim-forward-consumer-single";
 
     public final static String USER_LOGIN_STATUS_PREFIX = "user-login-status";
 

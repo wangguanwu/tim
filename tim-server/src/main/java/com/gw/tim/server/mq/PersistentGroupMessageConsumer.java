@@ -6,6 +6,7 @@ import com.gw.tim.server.api.vo.mq.MqGroupMessageReqVO;
 import com.gw.tim.server.dao.TimGroupMessageDao;
 import com.gw.tim.server.pojo.TimGroupMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.spring.annotation.MessageModel;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.beans.BeanUtils;
@@ -19,7 +20,8 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@RocketMQMessageListener(topic = Constants.MQ_MESSAGE_GROUP_TOPIC, consumerGroup = Constants.MQ_MESSAGE_CONSUMER_TYPE_PERSISTENT)
+@RocketMQMessageListener(topic = Constants.MQ_MESSAGE_GROUP_TOPIC, consumerGroup = Constants.MQ_GROUP_MESSAGE_CONSUMER_TYPE_PERSISTENT,
+messageModel = MessageModel.CLUSTERING)
 public class PersistentGroupMessageConsumer implements RocketMQListener<String> {
 
     @Autowired
