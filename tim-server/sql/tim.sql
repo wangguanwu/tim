@@ -1,3 +1,4 @@
+use tim;
 drop
 database if exists tim;
 CREATE
@@ -32,3 +33,12 @@ CREATE TABLE `tim_single_message`
     PRIMARY KEY (`id`),
     UNIQUE KEY `msg_id_UNIQUE` (`msg_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+drop TABLE if exists `tim_user`;
+CREATE TABLE `tim_user` (
+                            `id` bigint NOT NULL AUTO_INCREMENT,
+                            `user_name` varchar(64) COLLATE utf8mb4_bin NOT NULL,
+                            `gender` varchar(2) COLLATE utf8mb4_bin DEFAULT ' ',
+                            `user_nick` varchar(64) COLLATE utf8mb4_bin DEFAULT ' ',
+                            PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin
